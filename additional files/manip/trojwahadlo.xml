@@ -1,0 +1,32 @@
+<elements>
+ <element type="8" material="5">
+  <rotation>0.00</rotation>
+ </element>
+ <element type="6" material="3">
+  <rotation>0.00</rotation>
+  <length>4.00</length>
+ </element>
+ <element type="2" material="0">
+  <rotation>0.00</rotation>
+  <maxPositiveAngle>90.00</maxPositiveAngle>
+  <maxNegativeAngle>90.00</maxNegativeAngle>
+ </element>
+ <element type="6" material="3">
+  <rotation>0.00</rotation>
+  <length>6.00</length>
+ </element>
+ <element type="2" material="0">
+  <rotation>0.00</rotation>
+  <maxPositiveAngle>90.00</maxPositiveAngle>
+  <maxNegativeAngle>90.00</maxNegativeAngle>
+ </element>
+ <element type="6" material="3">
+  <rotation>0.00</rotation>
+  <length>5.00</length>
+ </element>
+ <element type="0" material="0">
+  <rotation>0.00</rotation>
+  <maxPositiveAngle>90.00</maxPositiveAngle>
+  <maxNegativeAngle>90.00</maxNegativeAngle>
+ </element>
+</elements>

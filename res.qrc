@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>models/sample1.obj</file>
+        <file>models/base1p1.obj</file>
+        <file>models/base1p2.obj</file>
+        <file>models/joint1.obj</file>
+        <file>models/tip.obj</file>
+        <file>icons/joint.png</file>
+        <file>icons/link.png</file>
+        <file>icons/tip.png</file>
+        <file>icons/base.png</file>
+        <file>icons/en.png</file>
+        <file>icons/pl.png</file>
+        <file>models/joint2p1.obj</file>
+        <file>models/joint2p2.obj</file>
+        <file>models/link2.obj</file>
+        <file>models/base2p1.obj</file>
+        <file>models/link1.obj</file>
+        <file>models/joint3p1.obj</file>
+        <file>models/joint3p2.obj</file>
+        <file>models/joint4p1.obj</file>
+        <file>models/zAxis.obj</file>
+        <file>models/xAxis.obj</file>
+        <file>models/token.obj</file>
+        <file>languages/visualisation_pl.qm</file>
+    </qresource>
+</RCC>
