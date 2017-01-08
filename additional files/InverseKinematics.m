@@ -41,6 +41,8 @@ function InverseKinematics(xd,q_0,typeID)
               -d6*cosd(q(2)+q(3))*sind(q(4))*sind(q(5))+d6*sind(q(2)+q(3))*cosd(q(5))+d4*sind(q(2)+q(3))+a3*cosd(q(2)+q(3))+a2*cosd(q(2))+d1];
     handler = @(q)  0.5 * J(q)' * (J(q) * J(q)')^-1 * (xd - k(q));
   endif
-  qd = lsode(handler,q_0,t)
+  qd = lsode(handler,q_0,t);
+  printf('IK\n');
+  disp(qd)
   %qf = qd(end,:)
 endfunction

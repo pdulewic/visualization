@@ -12,7 +12,7 @@ function calculate_DH(Z,A)
   % Algorytm działa przy założeniu, że mamy co najmniej 2 układy współrzędnych.
   % W innym wypadku tabela DH byłaby pusta. 
   if (n < 2)      
-    printf ('TOOSMALL\n'); % kod błędu dla wywołującego algorytm programu
+    printf ('TOOSMALL\r\n'); % kod błędu dla wywołującego algorytm programu
     return
   endif
   
@@ -156,7 +156,7 @@ function calculate_DH(Z,A)
   
   % Wypisanie tabeli DH na standardowe wyjście
   printf('DH\n');
-  DH_table
+  disp(DH_table);
   % Wypisanie informacji o typie pierwszego przegubu
   if( z_axis(1,:) == [0 1 0])
     printf('base2\n');

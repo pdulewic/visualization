@@ -21,7 +21,6 @@ const float MIN_SCENE_ZOOM = 0.05;
 const float MAX_SCENE_ZOOM = 2.0;
 const float SCROLL_SENSITIVITY = 0.1;
 const int IK_ANIMATION_STEPS = 120;
-//const float MAX_TIP_TRACE_STEP = 3.0;
 const int TOKEN_MATERIAL_ID = 6;   //silver token
 
 // temporary range for tip coordinates in IK module

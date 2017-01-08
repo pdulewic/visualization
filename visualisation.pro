@@ -51,7 +51,15 @@ HEADERS  += inc/mainwindow.h \
 
 CONFIG += c++11
 
-LIBS += -lglut -lGLU
+LIBS += -lglut
+
+linux-g++ | linux-g++-64 | linux-g++-32 {
+    LIBS += -lGLU
+}
+
+win32 {
+    LIBS += -lglu32 -lopengl32
+}
 
 RESOURCES += \
     res.qrc

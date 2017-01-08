@@ -9,8 +9,8 @@
 #include "inc/materials.h"
 
 Scene::Scene(Manipulator *m, OctaveConnection *o, QWidget *parent): QGLWidget(parent), posX(0.0),posY(0.0),rotX(0.0),rotY(0.0),
-                                                                    size(1.0), man(m), octave(o), postureChanged(false),
-                                                                    isPaintingEnabled(true), isTokenVisible(false){
+                                                                    size(1.0), man(m), octave(o), isTraceVisible(false), areCoordinatesVisible(false),
+                                                                    postureChanged(false), isPaintingEnabled(true), isTokenVisible(false){
     parameters = new DHParameters(this,this);
     connect(octave,SIGNAL(newDHTable(QVector<std::array<double,4> >&,ElementType)),parameters,SLOT(setDHParameters(QVector<std::array<double,4> >&,ElementType)));
     leftButtonIsClicked = false;

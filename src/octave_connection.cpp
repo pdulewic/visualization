@@ -11,7 +11,7 @@
 
 #include <QDebug>
 
-OctaveConnection::OctaveConnection(QString p, QObject *parent): QProcess(parent), path(p), qSize(0), terminalIsOpen(false){
+OctaveConnection::OctaveConnection(QString p, QObject *parent): QProcess(parent), path(p), currentType(""), qSize(0), terminalIsOpen(false){
     connect(this,SIGNAL(readyReadStandardOutput()),this,SLOT(readStandardOutput()));
 
 }
@@ -53,59 +53,86 @@ void OctaveConnection::resetPartialKinematics(){
 
 void OctaveConnection::readStandardOutput(){
     QByteArray data = readAllStandardOutput();
+    if(terminalIsOpen){
+        display->append(QString::fromLocal8Bit(data.data() ) );
+        return;
+    }
     QTextStream output(data);
     QString buffer;
-    output >> buffer;
-    if(buffer == "qd"){
-        output >> buffer;
-        if(buffer != "="){
-            qDebug() << "error occured while parsing octave output";
-            return;
-        }
-        QQueue<QVector<float>> trace;
-        for(int j=0; j<IK_ANIMATION_STEPS; ++j){
-            float tmp;
-            QVector<float> q(qSize);
-            for(int i=qSize-1; i>=0; --i){
-                output >> tmp;
-                q[i] = tmp;
+
+    if(currentType == ""){
+       output >> currentType;
+       // on windows data stream ends with additional character
+       // WARNING! this code wasn't tested on Mac OS
+       #ifdef Q_OS_WIN
+       output >> buffer;
+       #endif
+       if(currentType == "IK"){
+           tmpIK.clear(qSize);
+       }
+       else if(currentType == "TOOSMALL"){
+           QVector<std::array<double, 4>> tmp;
+           emit newDHTable(tmp,ElementType::Base1);
+       }
+    }
+    if(currentType == "DH"){      // DH table
+        while(!output.atEnd()){
+            if(tmpDH.cntTable < numberOfPartialKinematics-1){ // there is still some numerical data
+                output >> tmpDH.row[tmpDH.cntRow];
+                ++tmpDH.cntRow;
+                if(tmpDH.cntRow == 4){
+                    tmpDH.table.push_back(tmpDH.row);
+                    tmpDH.cntRow = 0;
+                    ++tmpDH.cntTable;
+                }
             }
-            if(qSize == 5) // temporary fanuc detection
-                q.push_front(0);
-            trace.enqueue(q);
+            else{              // only base type left in buffer
+                output >> buffer;
+                ElementType type;
+                if(buffer == "base1")
+                    type = ElementType::Base1;
+                else if(buffer == "base2")
+                    type = ElementType::Base2;
+                else{
+                    currentType = "";
+                    write(QString("calculate_DH(Z,A);\n").toLocal8Bit());
+                    return;
+                }
+                currentType = "";
+                emit newDHTable(tmpDH.table,type);
+                tmpDH.clear();
+                return;
+            }
         }
-        emit newInverseKinematics(trace);
-
     }
-    else if(buffer == "TOOSMALL"){
-        QVector<std::array<double, 4>> tmp;
-        emit newDHTable(tmp,ElementType::Base1);
-    }
-    else if(buffer == "DH"){
-        output >> buffer;
-        output >> buffer;
-
-        QVector<std::array<double, 4>> params;
-        for(int i=0; i<numberOfPartialKinematics-1; ++i){
-            std::array<double, 4> tmp;
-            for(int j=0; j<4; ++j)
-                output >> tmp[j];
-            params.push_back(tmp);
+    else if(currentType == "IK"){     // Inverse kinematics
+        while(!output.atEnd()){
+            output >> tmpIK.pose[qSize - 1 - tmpIK.cntPose];
+            if(output.atEnd())
+                return;
+            ++tmpIK.cntPose;
+            if(tmpIK.cntPose == qSize){
+                if(tmpIK.cntPose == 5){  // fanuc
+                    QVector<float> fanucPose(tmpIK.pose);
+                    fanucPose.push_front(0.0);
+                    tmpIK.animation.enqueue(fanucPose);
+                }
+                else{
+                    tmpIK.animation.enqueue(tmpIK.pose);
+                }
+                ++tmpIK.cntAnimation;
+                tmpIK.cntPose = 0;
+            }
+            if(tmpIK.cntAnimation == IK_ANIMATION_STEPS){
+                currentType = "";
+                emit newInverseKinematics(tmpIK.animation);
+                return;
+            }
         }
-        output >> buffer;
-        ElementType type;
-        if(buffer == "base1")
-            type = ElementType::Base1;
-        else if(buffer == "base2")
-            type = ElementType::Base2;
-        else{
-            write(QString("calculate_DH(Z,A);\n").toLocal8Bit());
-            return;
-        }
-        emit newDHTable(params,type);
     }
-    else if(terminalIsOpen){
-        display->append(QString::fromLocal8Bit(data.data() ) );
+    else{
+        tmpDH.clear();
+        currentType = "";
     }
 }
 
@@ -156,4 +183,17 @@ void OctaveConnection::sendIKRequest(const QVector3D &xd, const QVector<float> &
 
     QString command = "InverseKinematics(" + xdString + "," + q0String + "," + QString::number(type) + ");\n";
     write(command.toLocal8Bit());
+}
+
+void IK::clear(int sz){
+    pose = QVector<float>(sz);
+    animation.clear();
+    cntPose = 0;
+    cntAnimation = 0;
+}
+
+void DH::clear(){
+    table.clear();
+    cntRow = 0;
+    cntTable = 0;
 }

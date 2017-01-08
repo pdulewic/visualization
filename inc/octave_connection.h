@@ -17,6 +17,24 @@ class QTextBrowser;
 class QTextEdit;
 class QPushButton;
 
+struct IK{
+    QVector<float> pose;
+    QQueue<QVector<float>> animation;
+    int cntPose;
+    int cntAnimation;
+    void clear(int sz=0);
+    IK(){ clear(); }
+};
+
+struct DH{
+    std::array<double, 4> row;
+    QVector<std::array<double, 4>> table;
+    int cntRow;
+    int cntTable;
+    void clear();
+    DH(){clear(); }
+};
+
 
 /*!
  * \brief Class responsible for communication with Octave
@@ -35,7 +53,8 @@ class OctaveConnection: public QProcess{
     Q_OBJECT
 
     QString path;
-    QVector3D previousPosition;
+    QString currentType;
+    //QVector3D previousPosition;
     int numberOfPartialKinematics;
     int qSize;
 
@@ -44,6 +63,9 @@ class OctaveConnection: public QProcess{
     QTextBrowser* display;
     QTextEdit* commandLine;
     QPushButton* send;
+
+    DH tmpDH;
+    IK tmpIK;
 public:
     OctaveConnection(QString p = QString(), QObject* parent = nullptr);
     void loadPartialKinematics(const GLfloat matrix[]);
