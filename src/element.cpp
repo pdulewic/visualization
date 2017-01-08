@@ -23,13 +23,13 @@ void Element::calculateZAxis(OctaveConnection *octave, QVector<QVector3D> &axis)
     switch(type){
     case ElementType::Base1:
         glGetFloatv(GL_MODELVIEW_MATRIX, partialKinematics);
-        octave->loadMatrix(partialKinematics,OctaveConnection::PartialKinematics);
+        octave->loadPartialKinematics(partialKinematics);
         axis.push_back(QVector3D(1.0, 0.0, 0.0));
         glTranslatef(0.0, 1.155, 0.0);
         break;
     case ElementType::Base2:
         glGetFloatv(GL_MODELVIEW_MATRIX, partialKinematics);
-        octave->loadMatrix(partialKinematics,OctaveConnection::PartialKinematics);
+        octave->loadPartialKinematics(partialKinematics);
         axis.push_back(QVector3D(0.0, 1.0, 0.0));
         glTranslatef(0.0, 2.61, 0.0);
         break;
@@ -37,21 +37,21 @@ void Element::calculateZAxis(OctaveConnection *octave, QVector<QVector3D> &axis)
         glTranslatef(0.0, 0.63987, 0.0);
         axis.push_back(QVector3D(1.0, 0.0, 0.0));
         glGetFloatv(GL_MODELVIEW_MATRIX, partialKinematics);
-        octave->loadMatrix(partialKinematics,OctaveConnection::PartialKinematics);
+        octave->loadPartialKinematics(partialKinematics);
         glTranslatef(0.0, 1.155, 0.0);
         break;
     case ElementType::Joint2:
         glTranslatef(0.0, 0.55, 0.0);
         axis.push_back(QVector3D(0.0, 1.0, 0.0));
         glGetFloatv(GL_MODELVIEW_MATRIX, partialKinematics);
-        octave->loadMatrix(partialKinematics,OctaveConnection::PartialKinematics);
+        octave->loadPartialKinematics(partialKinematics);
         glTranslatef(0.0, 0.5, 0.0);
         break;
     case ElementType::Joint3:
         glTranslatef(0.0, 0.85, 0.0);
         axis.push_back(QVector3D(0.0, 1.0, 0.0));
         glGetFloatv(GL_MODELVIEW_MATRIX, partialKinematics);
-        octave->loadMatrix(partialKinematics,OctaveConnection::PartialKinematics);
+        octave->loadPartialKinematics(partialKinematics);
         glTranslatef(0.0, 0.8, 0.0);
         break;
     case ElementType::Joint4:
@@ -59,7 +59,7 @@ void Element::calculateZAxis(OctaveConnection *octave, QVector<QVector3D> &axis)
         glRotatef(-90, 0.0, 0.0, 1.0);
         axis.push_back(QVector3D(0.0, 1.0, 0.0));
         glGetFloatv(GL_MODELVIEW_MATRIX, partialKinematics);
-        octave->loadMatrix(partialKinematics,OctaveConnection::PartialKinematics);
+        octave->loadPartialKinematics(partialKinematics);
         glTranslatef(0.0, 0.55, 0.0);
         break;
     case ElementType::Link1:
@@ -73,7 +73,7 @@ void Element::calculateZAxis(OctaveConnection *octave, QVector<QVector3D> &axis)
     case ElementType::Tip:
         glTranslatef(0.0, 1.5, 0.0);
         glGetFloatv(GL_MODELVIEW_MATRIX, partialKinematics);
-        octave->loadMatrix(partialKinematics,OctaveConnection::PartialKinematics);
+        octave->loadPartialKinematics(partialKinematics);
         break;
     case ElementType::xAxis:
     case ElementType::zAxis:

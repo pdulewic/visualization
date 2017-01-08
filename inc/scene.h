@@ -51,7 +51,6 @@ protected:
 private slots:
     void periodicEvent();
 public slots:
-    void addTipPosition(QVector3D pos);
     void setTraceVisible(bool visible = true){ isTraceVisible = visible; }
     void setCoordinatesVisible(bool visible = true){ areCoordinatesVisible = visible; }
     void setManipulatorVisible(bool visible = true){ isManipulatorVisible = visible; }
@@ -64,7 +63,7 @@ public slots:
     void setPaintingEnabled(bool enabled = true){ isPaintingEnabled = enabled; }
     void calculateDH();
 signals:
-    void tipPositionChanged(QVector3D position);
+    void newTipPosition(const QVector3D position);
 };
 
 #endif // SCENE

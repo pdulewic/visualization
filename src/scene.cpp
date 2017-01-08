@@ -3,6 +3,7 @@
 #include "inc/octave_connection.h"
 #include <GL/glu.h>
 #include <QMouseEvent>
+#include <QMatrix4x4>
 
 #include <QDebug>
 #include "inc/materials.h"
@@ -57,11 +58,25 @@ void Scene::paintGL(){
     if(postureChanged){
         postureChanged = false;
         angles = man->getAngles();
-        octave->loadMatrix(viewMatrix,OctaveConnection::View);
+        QMatrix4x4 viewMartix4x4 {viewMatrix};
+        viewMartix4x4 = viewMartix4x4.transposed();
         GLfloat modelviewMatrix[16];
         glGetFloatv(GL_MODELVIEW_MATRIX, modelviewMatrix);
-        octave->loadMatrix(modelviewMatrix,OctaveConnection::Modelview);
-        octave->sendTipPositionRequest(parameters->getBaseType());
+        QMatrix4x4 modelviewMartix4x4 {modelviewMatrix};
+        modelviewMartix4x4 = modelviewMartix4x4.transposed();
+        QMatrix4x4 tmp;
+        if(parameters->getBaseType() == ElementType::Base1)
+            tmp = QMatrix4x4(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
+        else
+            tmp = QMatrix4x4(1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+        bool success = false;
+        QMatrix4x4 kinematics = tmp * viewMartix4x4.inverted(&success) * modelviewMartix4x4;
+        if(success){
+            QVector3D pos(kinematics(0,3),kinematics(1,3),kinematics(2,3));
+            tipTrace.push_back(pos);
+            emit newTipPosition(pos);
+        }
+
     }
 
     if(areCoordinatesVisible){
@@ -77,10 +92,6 @@ void Scene::paintGL(){
         glBegin(GL_LINES);
         glColor3f(1.0, 0.0, 0.0);
         for(auto it = tipTrace.begin(); it+1 < tipTrace.end();){
-            if(QVector3D(*it - *(it+1)).length() > MAX_TIP_TRACE_STEP){
-                ++it;
-                continue;
-            }
             glVertex3f(it->x(), it->y(), it->z());
             ++it;
             glVertex3f(it->x(), it->y(), it->z());
@@ -161,10 +172,6 @@ void Scene::periodicEvent(){
     update();
 }
 
-void Scene::addTipPosition(QVector3D pos){
-    if(pos != QVector3D(0.0, 0.0, 0.0))
-        tipTrace.push_back(pos);
-}
 
 
 void Scene::resetObserverPosition(){
@@ -188,5 +195,7 @@ void Scene::calculateDH(){
     // angles back to the default position, so probably posture changes.
     // forcing angles to reload is necessary anyway
     postureChanged = true;
+    // old tip trace becomes obsolete
+    clearTrace();
 
 }

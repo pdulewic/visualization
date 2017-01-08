@@ -45,16 +45,9 @@ class OctaveConnection: public QProcess{
     QTextEdit* commandLine;
     QPushButton* send;
 public:
-    enum MatrixType{
-        Modelview,         // name in octave workspace: Mv
-        View,              // name in octave workspace: V
-        PartialKinematics  // name in octave workspace: Ax, where x = 1, 2, 3...
-    };
-
     OctaveConnection(QString p = QString(), QObject* parent = nullptr);
-    void loadMatrix(const GLfloat matrix[], MatrixType type);
+    void loadPartialKinematics(const GLfloat matrix[]);
     void sendKinematicsRequest(const QVector<QVector3D> &zAxis);
-    void sendTipPositionRequest(ElementType base);
     void runOctave();
     void resetPartialKinematics();
 private slots:
@@ -65,7 +58,6 @@ public slots:
     void openTerminal();
     void sendIKRequest(const QVector3D &xd, const QVector<float> &q0, IKDialog::Model type);
 signals:
-    void newTipPosition(const QVector3D position);
     void newDHTable(QVector<std::array<double, 4>>& param, ElementType type);
     void newInverseKinematics(const QQueue<QVector<float>> &q);
 };

@@ -16,25 +16,14 @@ OctaveConnection::OctaveConnection(QString p, QObject *parent): QProcess(parent)
 
 }
 
-void OctaveConnection::loadMatrix(const GLfloat matrix[], OctaveConnection::MatrixType type){
-    QString command;
-    switch(type){
-    case Modelview:
-        command = "Mv = [";
-        break;
-    case View:
-        command = "V = [";
-        break;
-    case PartialKinematics:
-        command = QString("A{%1} = [").arg(++numberOfPartialKinematics);
-    }
+void OctaveConnection::loadPartialKinematics(const GLfloat matrix[]){
+    QString command = QString("A{%1} = [").arg(++numberOfPartialKinematics);
     for(int i=0; i<4; ++i){
         for(int j=0; j<4; ++j)
             command.append(QString::number(matrix[i+4*j]) + " ");
         command.append(';');
     }
     command.append("];\n");
-    //qDebug() << command;
     write(command.toLocal8Bit());
 }
 
@@ -43,15 +32,8 @@ void OctaveConnection::sendKinematicsRequest(const QVector<QVector3D> &zAxis){
     for(const auto &it : zAxis)
         command.append(QString("%1, %2, %3;").arg(it.x()).arg(it.y()).arg(it.z()));
     command.append("];\n");
-    //qDebug() << command;
     write(command.toLocal8Bit());
     write(QString("calculate_DH(Z,A);\n").toLocal8Bit());
-}
-
-
-void OctaveConnection::sendTipPositionRequest(ElementType base){
-    QString command = QString("TipPosition(V,Mv,%1)\n").arg(static_cast<int>(base));
-    write(command.toLocal8Bit());
 }
 
 
@@ -74,21 +56,7 @@ void OctaveConnection::readStandardOutput(){
     QTextStream output(data);
     QString buffer;
     output >> buffer;
-    if(buffer == "x"){
-        output >> buffer;
-        if(buffer != "="){
-            qDebug() << "error occured while parsing octave output";
-            return;
-        }
-        float x[3];
-        output >> x[0] >> x[1] >> x[2];
-        QVector3D tipPosition(x[0], x[1], x[2]);
-        if(tipPosition != previousPosition){
-            previousPosition = tipPosition;
-            emit newTipPosition(tipPosition);
-        }
-    }
-    else if(buffer == "qd"){
+    if(buffer == "qd"){
         output >> buffer;
         if(buffer != "="){
             qDebug() << "error occured while parsing octave output";

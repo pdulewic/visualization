@@ -66,9 +66,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), areUnsavedChanges(
     panel->connectWithScene(scene);
     settingsWin = new SettingsWindow;
 
-    connect(octave,SIGNAL(newTipPosition(QVector3D)),panel,SLOT(showTipCoordinates(QVector3D)));
+    connect(scene,SIGNAL(newTipPosition(QVector3D)),panel,SLOT(showTipCoordinates(QVector3D)));
     connect(octave,SIGNAL(newInverseKinematics(QQueue<QVector<float> >)),panel,SLOT(animateMovement(QQueue<QVector<float> >)));
-    connect(octave,SIGNAL(newTipPosition(QVector3D)),scene,SLOT(addTipPosition(QVector3D)));
     connect(panel,SIGNAL(postureChanged()),scene,SLOT(setPostureChanged()));
     connect(&manipulator,SIGNAL(kinematicChainChanged()),scene,SLOT(calculateDH()));
     connect(&manipulator,SIGNAL(kinematicChainAboutToChange(bool)),scene,SLOT(setPaintingEnabled(bool)));
