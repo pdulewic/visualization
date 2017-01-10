@@ -8,12 +8,15 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 #include <QDebug>
 
-OctaveConnection::OctaveConnection(QString p, QObject *parent): QProcess(parent), path(p), currentType(""), qSize(0), terminalIsOpen(false){
+OctaveConnection::OctaveConnection(QString p, QObject *parent): QProcess(parent), path(p), currentType(""), qSize(0), terminalIsOpen(false), errorFlag(false){
     connect(this,SIGNAL(readyReadStandardOutput()),this,SLOT(readStandardOutput()));
-
+    connect(this,SIGNAL(readyReadStandardError()),this,SLOT(readStandardError()));
+    connect(this,SIGNAL(stateChanged(QProcess::ProcessState)),this,SLOT(restartAfterCrash(QProcess::ProcessState)));
+    connect(this,SIGNAL(finished(int)),this,SLOT(callMeWhenFinished()));
 }
 
 void OctaveConnection::loadPartialKinematics(const GLfloat matrix[]){
@@ -24,6 +27,7 @@ void OctaveConnection::loadPartialKinematics(const GLfloat matrix[]){
         command.append(';');
     }
     command.append("];\n");
+    //qDebug() << command;
     write(command.toLocal8Bit());
 }
 
@@ -32,6 +36,7 @@ void OctaveConnection::sendKinematicsRequest(const QVector<QVector3D> &zAxis){
     for(const auto &it : zAxis)
         command.append(QString("%1, %2, %3;").arg(it.x()).arg(it.y()).arg(it.z()));
     command.append("];\n");
+    //qDebug() << command;
     write(command.toLocal8Bit());
     write(QString("calculate_DH(Z,A);\n").toLocal8Bit());
 }
@@ -45,6 +50,12 @@ void OctaveConnection::runOctave(){
     start(path,arguments);
 }
 
+void OctaveConnection::closeOctave(){
+    errorFlag = false;
+    kill();
+    waitForFinished();
+}
+
 void OctaveConnection::resetPartialKinematics(){
     numberOfPartialKinematics = 0;
     // initialize cell array for partial kinematics
@@ -54,7 +65,8 @@ void OctaveConnection::resetPartialKinematics(){
 void OctaveConnection::readStandardOutput(){
     QByteArray data = readAllStandardOutput();
     if(terminalIsOpen){
-        display->append(QString::fromLocal8Bit(data.data() ) );
+        emit newText(QString::fromLocal8Bit(data.data() ));
+        //display->append(QString::fromLocal8Bit(data.data() ) );
         return;
     }
     QTextStream output(data);
@@ -136,18 +148,54 @@ void OctaveConnection::readStandardOutput(){
     }
 }
 
-void OctaveConnection::sendCommand(){
-    if(terminalIsOpen){
-        QString command = commandLine->toPlainText() + "\n";
-        write(command.toLocal8Bit());
-        commandLine->setText("");
+void OctaveConnection::readStandardError(){
+    QByteArray data = readAllStandardError();
+    lastErrorMessage = QString(data);
+    errorFlag = true;
+    emit newText(QString::fromLocal8Bit(data.data() ));
+}
+
+void OctaveConnection::restartAfterCrash(ProcessState newState){
+    if(newState == NotRunning && errorFlag){
+        // clearing error flag, so MessageBox will not appear on standard closing
+        errorFlag = false;
+
+        QMessageBox octaveCrashed;
+        octaveCrashed.setText(tr("A GNU Octave critical error has occurred."));
+        octaveCrashed.setInformativeText(lastErrorMessage);
+        octaveCrashed.setIcon(QMessageBox::Critical);
+        octaveCrashed.exec();
+        kill();
     }
 }
 
+void OctaveConnection::sendCommand(const QString& command){
+    /*if(terminalIsOpen){
+        QString command = commandLine->toPlainText() + "\n";
+        write(command.toLocal8Bit());
+        commandLine->setText("");
+    }*/
+    //command += "\n";
+    write(command.toLocal8Bit());
+}
+
 void OctaveConnection::openTerminal(){
-    terminal = new QDialog(qobject_cast<QWidget*>(parent()));
-    terminal->setWindowTitle(tr("Terminal"));
-    connect(terminal,SIGNAL(destroyed(QObject*)),this,SLOT(setTerminalIsOpenFalse()));
+    terminal = new OctaveTerminal(qobject_cast<QWidget*>(parent()));
+    //terminal = new OctaveTerminal(this);
+    /*QString title(tr("Terminal (GNU Octave "));
+    switch(state()){
+    case Running:
+        title += tr("running)");
+        break;
+    case Starting:
+        title += tr("starting)");
+        break;
+    case NotRunning:
+        title += tr("not running)");
+        break;
+    }
+    terminal->setWindowTitle(title);
+    connect(terminal,SIGNAL(finished(int)),this,SLOT(setTerminalIsOpenFalse()));
     display = new QTextBrowser;
     display->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     commandLine = new QTextEdit;
@@ -164,7 +212,10 @@ void OctaveConnection::openTerminal(){
     mainLayout->addWidget(display);
     mainLayout->addLayout(downLayout);
 
-    terminal->setLayout(mainLayout);
+    terminal->setLayout(mainLayout);*/
+    connect(terminal,SIGNAL(newCommand(QString)),this,SLOT(sendCommand(QString)));
+    connect(this,SIGNAL(newText(QString)),terminal,SLOT(displayText(QString)));
+    connect(terminal,SIGNAL(finished(int)),this,SLOT(setTerminalIsOpenFalse()));
     terminalIsOpen = true;
     terminal->show();
 }

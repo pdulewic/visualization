@@ -4,15 +4,18 @@
 ## wektory definiujące kolejne osie 'z'. 'A' jest tablicą komórek, przechowującą
 ## macierze 4x4, za pomocą których można odwzorować układy współrzędnych
 ## kolejnych wektorów do bazowego układu współrzednych. W ten sposób wszystkie
-## osie 'z' są wyrażnowe w tym samym układzie współrzędnych. 
+## osie 'z' są wyrażone w tym samym układzie współrzędnych. 
 
 function calculate_DH(Z,A)
-  n = size(A)(2);  %liczba układów współrzędnych
+  n = size(A)(2);   % liczba układów współrzędnych
+  
+  NUM_ERR_SENS = 4; % liczba miejsc po przecinku, po których różnice między
+                    % wartościami traktowane są jako błąd numeryczny
   
   % Algorytm działa przy założeniu, że mamy co najmniej 2 układy współrzędnych.
   % W innym wypadku tabela DH byłaby pusta. 
   if (n < 2)      
-    printf ('TOOSMALL\r\n'); % kod błędu dla wywołującego algorytm programu
+    printf ('TOOSMALL\n'); % kod błędu dla wywołującego algorytm programu
     return
   endif
   
@@ -60,11 +63,12 @@ function calculate_DH(Z,A)
     b = (p2 - p1);
     x = M\b;
     
-    % korekcja błędów numerycznych przy równoległych osiach x
-    if(abs(x(1)) > 10000)
+    % korekcja błędów numerycznych przy równoległych osiach x. Stała 
+    % NUM_ERR_SENS jest tu użyta w nieco inny sposób
+    if(abs(x(1)) > 10^NUM_ERR_SENS)
       x(1) = 0;
     endif
-    if(abs(x(2)) > 10000)
+    if(abs(x(2)) > 10^NUM_ERR_SENS)
       x(2) = 0;
     endif
     
@@ -78,17 +82,18 @@ function calculate_DH(Z,A)
     cr2 = cross(z1, p2 + z2 - p1);
     
     % Wyznaczenie poczatków układów wspołrzędnych, i osi 'x'.
-    % Z powodu błędów numerycznych wartości różniące się o 0.001 od zera są
-    % traktowane tak samo jak zero. 
-    if(norm(cr1) < 0.001 & norm(cr2) < 0.001)  % osie 'z' nachodzą na siebie
-      origins(i,:) = origins(i-1,:);   % początek układu i oś x są takie same 
+    % Z powodu błędów numerycznych wartości różniące się o 10^(-NUM_ERR_SENS) od
+    % zera są traktowane tak samo jak zero. 
+    if(norm(cr1) < 10^(-NUM_ERR_SENS) & norm(cr2) < 10^(-NUM_ERR_SENS))  
+    % osie 'z' nachodzą na siebie
+      origins(i,:) = origins(i-1,:);   % początek układu i oś 'x' są takie same 
       x_axis(i,:) = x_axis(i-1,:);     % jak dla poprzedniej iteracji 
-    elseif(norm(N1 - N2) < 0.001)  % z(i-1) przecina zi
+    elseif(norm(N1 - N2) < 10^(-NUM_ERR_SENS))  % z(i-1) przecina zi
       x_axis(i,:) = (cross(z1, z2))';  % x = z(i-1) x zi
       origins(i,:) = N2'; 
-    else                           % osie z nie przecinają się
+    else                               % osie 'z' nie przecinają się
       origins(i,:) = N2';
-      if(norm(cross(z1,z2)) < 0.001) % osie z są równoległe
+      if(norm(cross(z1,z2)) < 10^(-NUM_ERR_SENS)) % osie 'z' są równoległe
         % wyznaczenie normalnej z(i-1), zi przecinającej zi w punkcie N2
         par = (z1(1)*(N2(1) - p1(1)) + z1(2)*(N2(2) - p1(2)) + z1(3)*(N2(3) - p1(3)))/(z1(1)^2 + z1(2)^2 + z1(3)^2);
         N1 = p1 + par * z1;  
@@ -100,12 +105,16 @@ function calculate_DH(Z,A)
   
   % Wyznaczenie układu współrzędnych efektora
   z_axis(n,:) = z_axis(n-1,:);                % zn równoległe do z(n-1)
-  y_n = (A{n}*[0 0 1 1]')'(1:3)-origins(n,:); % yn w kierunku zamykania chwytaka
+  y_n = (A{n}*[1 0 0 1]')'(1:3)-origins(n,:); % yn w kierunku zamykania chwytaka
+  % jeśli yn nachodzi na zn, wybierany jest inny wersor
+  if( norm(y_n - z_axis(n,:)) < 10^(-NUM_ERR_SENS) | norm(y_n + z_axis(n,:)) < 10^(-NUM_ERR_SENS)) 
+    y_n = (A{n}*[0 0 1 1]')'(1:3)-origins(n,:);%
+  endif
   x_axis(n,:) = cross(y_n , z_axis(n,:));     % xn dookreślone do układu 
                                               % prawoskrętnego
   
-  % Wektory definiujące osie x powstają w wyniku iloczynu wektorowego, mogą więc
-  % mieć różne długości i należy je znormalizować  
+  % Wektory definiujące osie x mogą mieć długość różną od 1, należy je więc
+  % znormalizować 
   for i = (1 : n-1)
     x_axis(i,:) = x_axis(i,:)/norm(x_axis(i,:));
   endfor
@@ -115,11 +124,11 @@ function calculate_DH(Z,A)
   for i = (2 : n)  
     DH_index = [1,4]; % indeksy kolumn liczonych kątów w tabeli DH
     for j = (1 : 2)
-      if(j == 1)  % obrót wokół osi z
+      if(j == 1)  % obrót wokół osi 'z'
         rot_axis = z_axis(i-1,:); % wektor wyznaczający oś obrotu
         w0 = x_axis(i-1,:);       % wektor początkowy
         w1 = x_axis(i,:);         % wektor końcowy
-      else        % obrót wokół osi x
+      else        % obrót wokół osi 'x'
         rot_axis = x_axis(i,:);
         w0 = z_axis(i-1,:);
         w1 = z_axis(i,:);
@@ -138,8 +147,13 @@ function calculate_DH(Z,A)
       % Dla dodatniego kąta:     w1 x w2 = rot_axis
       % Dla ujemnego kąta:       w1 x w2 = -rot_axis
       cr = cross(w0,w1);
+      
+      if(norm(cr) != 0)
+        cr = cr/norm(cr); % iloczyn wektorowy wersorow niekoniecznie zwroci wersor
+      endif
+      
       % Ze względu na błędy numeryczne nie można po prostu użyć '=='
-      if( norm(rot_axis - cr) > 0.0001 )
+      if( norm(rot_axis - cr) > 10^(-NUM_ERR_SENS) )
         angle = angle * -1;
       endif
       DH_table(i-1,DH_index(j)) = angle;

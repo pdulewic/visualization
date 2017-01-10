@@ -29,7 +29,9 @@ SOURCES += src/main.cpp\
     src/materials.cpp \
     src/dh_parameters.cpp \
     src/angle_spinbox.cpp \
-    src/ik_dialog.cpp
+    src/ik_dialog.cpp \
+    src/octave_terminal.cpp \
+    src/command_line.cpp
 
 
 HEADERS  += inc/mainwindow.h \
@@ -47,7 +49,9 @@ HEADERS  += inc/mainwindow.h \
     inc/settings_window.h \
     inc/dh_parameters.h \
     inc/angle_spinbox.h \
-    inc/ik_dialog.h
+    inc/ik_dialog.h \
+    inc/octave_terminal.h \
+    inc/command_line.h
 
 CONFIG += c++11
 

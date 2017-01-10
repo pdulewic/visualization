@@ -5,9 +5,7 @@
 #include "constants.h"
 #include <QObject>
 
-
 class OctaveConnection;
-
 
 class Element: public QObject{
     Q_OBJECT

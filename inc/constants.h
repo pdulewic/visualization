@@ -21,7 +21,8 @@ const float MIN_SCENE_ZOOM = 0.05;
 const float MAX_SCENE_ZOOM = 2.0;
 const float SCROLL_SENSITIVITY = 0.1;
 const int IK_ANIMATION_STEPS = 120;
-const int TOKEN_MATERIAL_ID = 6;   //silver token
+const int TOKEN_MATERIAL_ID = 6;    // silver token
+const int COMMAND_LINE_HEIGHT = 30; // command line in octave terminal
 
 // temporary range for tip coordinates in IK module
 const int IK_RANGE = 30;

@@ -9,8 +9,11 @@
 #include <array>
 #include "element_type.h"
 #include "ik_dialog.h"
+#include "octave_terminal.h"
 
 #include <GL/gl.h>
+
+#include <QDebug>
 
 class QDialog;
 class QTextBrowser;
@@ -54,15 +57,17 @@ class OctaveConnection: public QProcess{
 
     QString path;
     QString currentType;
+    QString lastErrorMessage;
     //QVector3D previousPosition;
     int numberOfPartialKinematics;
     int qSize;
 
     bool terminalIsOpen;
-    QDialog* terminal;
-    QTextBrowser* display;
+    bool errorFlag;
+    OctaveTerminal* terminal;
+   /* QTextBrowser* display;
     QTextEdit* commandLine;
-    QPushButton* send;
+    QPushButton* send;*/
 
     DH tmpDH;
     IK tmpIK;
@@ -71,17 +76,22 @@ public:
     void loadPartialKinematics(const GLfloat matrix[]);
     void sendKinematicsRequest(const QVector<QVector3D> &zAxis);
     void runOctave();
+    void closeOctave();
     void resetPartialKinematics();
 private slots:
     void readStandardOutput();
+    void readStandardError();
+    void restartAfterCrash(QProcess::ProcessState newState);
+    void callMeWhenFinished(){ runOctave(); }
     void setTerminalIsOpenFalse() {terminalIsOpen = false; }
-    void sendCommand();
+    void sendCommand(const QString& command);
 public slots:
     void openTerminal();
     void sendIKRequest(const QVector3D &xd, const QVector<float> &q0, IKDialog::Model type);
 signals:
     void newDHTable(QVector<std::array<double, 4>>& param, ElementType type);
     void newInverseKinematics(const QQueue<QVector<float>> &q);
+    void newText(const QString& text);
 };
 
 #endif // OCTAVE_CONNECTION

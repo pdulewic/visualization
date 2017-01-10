@@ -1,7 +1,6 @@
 #include "inc/edit_window.h"
 #include "inc/materials.h"
 #include "inc/constants.h"
-//#include <QListWidget>
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QHBoxLayout>
@@ -13,7 +12,6 @@
 #include <QLabel>
 #include <QGroupBox>
 
-#include <QDebug>
 
 EditWindow::EditWindow(Manipulator* m, QWidget* parent): QDialog(parent), man(m) {
     setWindowTitle(tr("Manipulator creator"));
@@ -61,7 +59,6 @@ EditWindow::EditWindow(Manipulator* m, QWidget* parent): QDialog(parent), man(m)
     connect(close,SIGNAL(clicked(bool)),this,SLOT(close()));
     lSaveClose->addWidget(close);
     QVBoxLayout* rightLayout = new QVBoxLayout;
-    //rightLayout->addLayout(formLayout);
     rightLayout->addWidget(properties);
 
     QWidget* test = new QWidget;

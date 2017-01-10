@@ -17,10 +17,6 @@
 #include <QApplication>
 #include <utility>
 
-#include <QDebug>
-#include <GL/gl.h>
-#include <QPushButton>
-
 extern QVector<QLocale::Language> supportedLanguages;
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), areUnsavedChanges(false) {
@@ -37,8 +33,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), areUnsavedChanges(
     // if language is not supported, english is used as a default
     if(!supportedLanguages.contains(QLocale(lang).language()))
         lang = "en";
-    if(!translator.load(QString(":/languages/visualisation_%1.qm").arg(lang)))
-        qDebug() << "Error occured when loading translation file";               // this can be removed in final release
+    if(!translator.load(QString(":/languages/visualisation_%1.qm").arg(lang))){
+        QMessageBox translationFileError;
+        translationFileError.setText(tr("Error occured when loading translation file!"));
+        translationFileError.setIcon(QMessageBox::Warning);
+        translationFileError.exec();
+    }
     qApp->installTranslator(&translator);
 
     if(settings.contains("workspace"))
@@ -91,11 +91,16 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), areUnsavedChanges(
     adjustSize();
 }
 
+MainWindow::~MainWindow(){
+    /*octave->terminate();
+    octave->waitForFinished();*/
+}
+
 void MainWindow::closeEvent(QCloseEvent *event){
     if(secureChanges())
         event->ignore();
     else{
-        octave->close();
+        octave->closeOctave();
         event->accept();
     }
 }

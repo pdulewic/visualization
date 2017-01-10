@@ -9,47 +9,47 @@
         <translation>Tabela Denavita-Hartenberga</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="32"/>
+        <location filename="../src/control_panel.cpp" line="30"/>
         <source>View</source>
         <translation>Widok</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="33"/>
+        <location filename="../src/control_panel.cpp" line="31"/>
         <source>Show tip trace</source>
         <translation>Wyświetl ślad efektora</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="34"/>
+        <location filename="../src/control_panel.cpp" line="32"/>
         <source>Clean tip trace</source>
         <translation>Wyczyść ślad efektora</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="39"/>
+        <location filename="../src/control_panel.cpp" line="37"/>
         <source>Show manipulator model</source>
         <translation>Wyświetl model manipulatora</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="40"/>
+        <location filename="../src/control_panel.cpp" line="38"/>
         <source>Show coordinate systems</source>
         <translation>Wyświetl układy współrzędnych</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="41"/>
+        <location filename="../src/control_panel.cpp" line="39"/>
         <source>Reset observer position</source>
         <translation>Resetuj położenie kamery</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="42"/>
+        <location filename="../src/control_panel.cpp" line="40"/>
         <source>Reset angles</source>
         <translation>Resetuj kąty</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="58"/>
+        <location filename="../src/control_panel.cpp" line="56"/>
         <source>Tip coordinates:</source>
         <translation>Pozycja efektora:</translation>
     </message>
     <message>
-        <location filename="../src/control_panel.cpp" line="87"/>
+        <location filename="../src/control_panel.cpp" line="84"/>
         <source>Control</source>
         <translation>Sterowanie</translation>
     </message>
@@ -57,73 +57,73 @@
 <context>
     <name>EditWindow</name>
     <message>
-        <location filename="../src/edit_window.cpp" line="21"/>
+        <location filename="../src/edit_window.cpp" line="17"/>
         <source>Manipulator creator</source>
         <translation>Kreator manipulatora</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="52"/>
+        <location filename="../src/edit_window.cpp" line="45"/>
         <source>Properties</source>
         <oldsource>Properties:</oldsource>
         <translation>Właściwości</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="54"/>
+        <location filename="../src/edit_window.cpp" line="47"/>
         <source>Type:</source>
         <translation>Typ:</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="55"/>
+        <location filename="../src/edit_window.cpp" line="48"/>
         <source>Material:</source>
         <translation>Materiał:</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="56"/>
+        <location filename="../src/edit_window.cpp" line="49"/>
         <source>Rotation:</source>
         <translation>Obrót:</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="57"/>
+        <location filename="../src/edit_window.cpp" line="50"/>
         <source>Max positive angle:</source>
         <translation>Maksymalny kąt dodatni:</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="58"/>
+        <location filename="../src/edit_window.cpp" line="51"/>
         <source>Max negative angle:</source>
         <translation>Maksymalny kąt ujemny:</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="59"/>
+        <location filename="../src/edit_window.cpp" line="52"/>
         <source>Length:</source>
         <translation>Długość:</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="62"/>
+        <location filename="../src/edit_window.cpp" line="55"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="65"/>
+        <location filename="../src/edit_window.cpp" line="58"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="82"/>
+        <location filename="../src/edit_window.cpp" line="71"/>
         <source>Move up</source>
         <translation>Przesuń w górę</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="86"/>
+        <location filename="../src/edit_window.cpp" line="75"/>
         <source>Move down</source>
         <translation>Przesuń w dół</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="90"/>
+        <location filename="../src/edit_window.cpp" line="79"/>
         <source>Add element</source>
         <translation>Nowy element</translation>
     </message>
     <message>
-        <location filename="../src/edit_window.cpp" line="94"/>
+        <location filename="../src/edit_window.cpp" line="83"/>
         <source>Remove element</source>
         <translation>Usuń element</translation>
     </message>
@@ -168,7 +168,7 @@
         <translation type="vanished">Wizualizacja manipulatora</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="51"/>
+        <location filename="../src/mainwindow.cpp" line="49"/>
         <source>Visualisation of the manipulator</source>
         <translation>Wizualizacja manipulatora</translation>
     </message>
@@ -177,62 +177,67 @@
         <translation type="vanished">Panel sterowania</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="112"/>
+        <location filename="../src/mainwindow.cpp" line="38"/>
+        <source>Error occured when loading translation file!</source>
+        <translation>Wystąpił błąd podczas ładowania pliku z tłumaczeniem!</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="111"/>
         <source>File</source>
         <translation>Plik</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="114"/>
+        <location filename="../src/mainwindow.cpp" line="113"/>
         <source>New</source>
         <translation>Nowy</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="118"/>
+        <location filename="../src/mainwindow.cpp" line="117"/>
         <source>Open</source>
         <translation>Otwórz</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="123"/>
+        <location filename="../src/mainwindow.cpp" line="122"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="127"/>
+        <location filename="../src/mainwindow.cpp" line="126"/>
         <source>Save as</source>
         <translation>Zapisz jako</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="131"/>
+        <location filename="../src/mainwindow.cpp" line="130"/>
         <source>Edit</source>
         <translation>Edycja</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="133"/>
+        <location filename="../src/mainwindow.cpp" line="132"/>
         <source>Edit manipulator</source>
         <translation>Edycja manipulatora</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="137"/>
+        <location filename="../src/mainwindow.cpp" line="136"/>
         <source>Preferences</source>
         <translation>Preferencje</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="141"/>
+        <location filename="../src/mainwindow.cpp" line="140"/>
         <source>Tools</source>
         <translation>Narzędzia</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="143"/>
+        <location filename="../src/mainwindow.cpp" line="142"/>
         <source>Octave terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="147"/>
+        <location filename="../src/mainwindow.cpp" line="146"/>
         <source>Inverse kinematics</source>
         <translation>Kinematyka odwrotna</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="157"/>
+        <location filename="../src/mainwindow.cpp" line="156"/>
         <source>The manipulator has been modified</source>
         <translation>Manipulator uległ zmianie</translation>
     </message>
@@ -241,43 +246,43 @@
         <translation type="vanished">Manipulator uległ modyfikacji.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="158"/>
+        <location filename="../src/mainwindow.cpp" line="157"/>
         <source>Do you want to save your changes?</source>
         <translation>Czy chcesz zapisać zmiany?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="187"/>
+        <location filename="../src/mainwindow.cpp" line="186"/>
         <source>Path to the GNU Octave executable file is not specified</source>
         <translation>Nie wskazano ścieżki do pliku wykonywalnego programu GNU Octave</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="188"/>
+        <location filename="../src/mainwindow.cpp" line="187"/>
         <source>Do you want to select it now?</source>
         <translation>Czy chcesz wskazać ją teraz?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="195"/>
+        <location filename="../src/mainwindow.cpp" line="194"/>
         <source>select octave executable</source>
         <translation>wybierz plik wykonywalny GNU Octave</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="195"/>
+        <location filename="../src/mainwindow.cpp" line="194"/>
         <source>all files (*)</source>
         <translation>wszystkie pliki (*)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="211"/>
+        <location filename="../src/mainwindow.cpp" line="210"/>
         <source>Open file</source>
         <translation>Otwórz plik</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="211"/>
-        <location filename="../src/mainwindow.cpp" line="238"/>
+        <location filename="../src/mainwindow.cpp" line="210"/>
+        <location filename="../src/mainwindow.cpp" line="237"/>
         <source>XML Files (*.xml)</source>
         <translation>Pliki XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="238"/>
+        <location filename="../src/mainwindow.cpp" line="237"/>
         <source>Save file as</source>
         <translation>Zapisz plik jako</translation>
     </message>
@@ -285,12 +290,28 @@
 <context>
     <name>OctaveConnection</name>
     <message>
-        <location filename="../src/octave_connection.cpp" line="193"/>
         <source>Terminal</source>
-        <translation>Terminal</translation>
+        <translation type="vanished">Terminal</translation>
     </message>
     <message>
-        <location filename="../src/octave_connection.cpp" line="200"/>
+        <source>Send</source>
+        <translation type="vanished">Wyślij</translation>
+    </message>
+    <message>
+        <location filename="../src/octave_connection.cpp" line="162"/>
+        <source>A GNU Octave critical error has occurred.</source>
+        <translation>Wystąpił błąd krytyczny programu GNU Octave.</translation>
+    </message>
+</context>
+<context>
+    <name>OctaveTerminal</name>
+    <message>
+        <location filename="../src/octave_terminal.cpp" line="13"/>
+        <source>Octave terminal</source>
+        <translation>Terminal Octave</translation>
+    </message>
+    <message>
+        <location filename="../src/octave_terminal.cpp" line="17"/>
         <source>Send</source>
         <translation>Wyślij</translation>
     </message>
@@ -386,42 +407,42 @@
         <translation>Preferencje</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="52"/>
+        <location filename="../src/settings_window.cpp" line="51"/>
         <source>Language:</source>
         <translation>Język:</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="60"/>
+        <location filename="../src/settings_window.cpp" line="59"/>
         <source>Workspace directory:</source>
         <translation>Katalog roboczy:</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="68"/>
+        <location filename="../src/settings_window.cpp" line="67"/>
         <source>Octave path:</source>
         <translation>Ścieżka do GNU Octave:</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="70"/>
+        <location filename="../src/settings_window.cpp" line="69"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="71"/>
+        <location filename="../src/settings_window.cpp" line="70"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="102"/>
+        <location filename="../src/settings_window.cpp" line="101"/>
         <source>select workspace</source>
         <translation>wybierz katalog roboczy</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="108"/>
+        <location filename="../src/settings_window.cpp" line="107"/>
         <source>select octave executable</source>
         <translation>wybierz plik wykonywalny GNU Octave</translation>
     </message>
     <message>
-        <location filename="../src/settings_window.cpp" line="108"/>
+        <location filename="../src/settings_window.cpp" line="107"/>
         <source>all files (*)</source>
         <translation>wszystkie pliki (*)</translation>
     </message>
